@@ -141,7 +141,7 @@ class MIS_Publisher {
 			'url'                        => $url,
 			'post_id'                    => $payload_post_id,
 			'cloudfront_distribution_id' => (string) MIS_Settings::get( 'cloudfront_distribution_id', '' ),
-			'extra_cdn'                  => MIS_Settings::get_extra_cdn(),
+			'extra_cdn'                  => self::extra_cdn_with_home_host( $base ),
 			'options'                    => (array) MIS_Settings::get( 'options', array() ),
 		);
 
@@ -234,5 +234,52 @@ class MIS_Publisher {
 	 */
 	private static function debounce_interval(): int {
 		return max( 1, (int) MIS_Settings::get( 'debounce_interval', 60 ) );
+	}
+
+	/**
+	 * Extra CDN domains plus the home_url() host when it differs from the scrape base host.
+	 *
+	 * Real sites store absolute content URLs pointing at the public host (home_url),
+	 * while the scrape usually targets an internal base (container network, reverse
+	 * proxy). The service downloads and rewrites extra CDN hosts end to end, so the
+	 * public host is included automatically — otherwise those absolute URLs would
+	 * leak into the static output and 404 there. Non-default ports are kept in the
+	 * entry (e.g. "localhost:8300"); default ports (80/443) are dropped.
+	 *
+	 * @param string $base Scrape base URL.
+	 * @return array
+	 */
+	private static function extra_cdn_with_home_host( string $base ): array {
+		$domains = MIS_Settings::get_extra_cdn();
+
+		$home = wp_parse_url( home_url() );
+		$from = wp_parse_url( $base );
+
+		if ( ! is_array( $home ) || empty( $home['host'] ) || ! is_array( $from ) || empty( $from['host'] ) ) {
+			return $domains;
+		}
+
+		$home_entry = self::host_with_port( $home );
+		$base_entry = self::host_with_port( $from );
+
+		if ( $home_entry !== $base_entry && ! in_array( $home_entry, $domains, true ) ) {
+			$domains[] = $home_entry;
+		}
+
+		return $domains;
+	}
+
+	/**
+	 * Builds a "host[:port]" entry from URL parts, keeping only non-default ports.
+	 *
+	 * @param array $parts URL parts from wp_parse_url().
+	 * @return string
+	 */
+	private static function host_with_port( array $parts ): string {
+		$entry = (string) $parts['host'];
+		if ( isset( $parts['port'] ) && ! in_array( (int) $parts['port'], array( 80, 443 ), true ) ) {
+			$entry .= ':' . (int) $parts['port'];
+		}
+		return $entry;
 	}
 }

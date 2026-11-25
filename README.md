@@ -128,7 +128,7 @@ All settings live under **Settings → Make it Static** (stored in a single `mis
 | HMAC secret | *(empty)* | Shared secret for request signing. The `MAKE_IT_STATIC_HMAC_SECRET` PHP constant in `wp-config.php` takes precedence when defined. |
 | Scrape URL base | *(empty)* | Optional override for the URL sent to the service (e.g. an internal hostname like `http://site_nginx`). When empty, the site's home URL is used. |
 | CloudFront distribution ID | *(empty)* | When set, the service creates an invalidation after upload. |
-| Extra CDN domains | *(empty)* | One domain per line; additional CDN hostnames rewritten in the static output. |
+| Extra CDN domains | *(empty)* | One domain per line; additional CDN hostnames rewritten in the static output. The `home_url()` host is added automatically when it differs from the scrape base host, so absolute URLs stored in post content are downloaded and rewritten too. |
 | Optimization options | all on | Toggle bundle CSS, bundle JS, compress images, compress HTML, convert fonts. |
 | Post types | post, page | Which post types trigger a publish when published or updated. |
 | Retry count | 3 | How many times a failed job is automatically re-published. |
