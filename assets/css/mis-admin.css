@@ -136,6 +136,80 @@
 	font-size: 12px;
 }
 
+/* Build report */
+.mis-report {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid #e0e0e0;
+	font-size: 12px;
+}
+
+.mis-report-pages {
+	margin: 0 0 6px;
+	font-weight: 600;
+}
+
+.mis-report-assets {
+	border-collapse: collapse;
+	margin: 0 0 6px;
+}
+
+.mis-report-assets th,
+.mis-report-assets td {
+	padding: 2px 10px 2px 0;
+	text-align: left;
+	font-size: 12px;
+}
+
+.mis-report-assets th {
+	font-weight: 600;
+	color: #646970;
+}
+
+.mis-report-totals td {
+	font-weight: 700;
+	border-top: 1px solid #e0e0e0;
+}
+
+.mis-report-delta--saved {
+	color: #21702b;
+}
+
+.mis-report-videos {
+	margin: 0 0 6px;
+	color: #646970;
+}
+
+.mis-report-videos.mis-report-cache {
+	color: #21702b;
+	font-weight: 600;
+}
+
+.mis-report-steps {
+	margin: 0 0 6px;
+	color: #646970;
+}
+
+.mis-report-top-label {
+	margin: 0;
+	font-weight: 600;
+}
+
+.mis-report-top {
+	margin: 2px 0 0;
+	padding-left: 16px;
+	list-style: disc;
+}
+
+.mis-report-top li {
+	margin: 0;
+}
+
+.mis-report-top code {
+	font-size: 11px;
+	word-break: break-all;
+}
+
 /* Action feedback */
 .mis-action-msg {
 	font-size: 12px;

@@ -225,6 +225,7 @@ class MIS_Admin {
 					);
 				}
 				echo '</dl>';
+				self::render_build_report( $result );
 			} else {
 				esc_html_e( 'Finished.', 'make-it-static' );
 			}
@@ -250,6 +251,285 @@ class MIS_Admin {
 		}
 
 		echo '<span aria-hidden="true">—</span>';
+	}
+
+	/**
+	 * Render the optional build report shipped in the job result.
+	 *
+	 * Older jobs have no `report` key; every sub-section is skipped when its
+	 * data is missing or malformed, since the result comes from external JSON.
+	 *
+	 * @param array $result Decoded job result.
+	 */
+	private static function render_build_report( array $result ): void {
+		if ( empty( $result['report'] ) || ! is_array( $result['report'] ) ) {
+			return;
+		}
+
+		$report = $result['report'];
+
+		ob_start();
+		self::render_report_pages( $report );
+		self::render_report_assets( $report );
+		self::render_report_steps( $report );
+		self::render_report_top_savings( $report );
+		$inner = (string) ob_get_clean();
+
+		if ( '' !== $inner ) {
+			// Sections escape their own output; only the wrapper is added here.
+			echo '<div class="mis-report">' . $inner . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	/**
+	 * Render the "Pages scraped" summary line.
+	 *
+	 * @param array $report Report data from the job result.
+	 */
+	private static function render_report_pages( array $report ): void {
+		if ( empty( $report['pages'] ) || ! is_array( $report['pages'] ) || ! isset( $report['pages']['count'] ) || ! is_numeric( $report['pages']['count'] ) ) {
+			return;
+		}
+
+		$bytes = isset( $report['pages']['bytes'] ) && is_numeric( $report['pages']['bytes'] ) ? (int) $report['pages']['bytes'] : 0;
+
+		printf(
+			'<p class="mis-report-pages">%s</p>',
+			esc_html(
+				sprintf(
+					/* translators: %1$s: number of pages, %2$s: total page size. */
+					__( 'Pages scraped: %1$s (%2$s)', 'make-it-static' ),
+					number_format_i18n( (int) $report['pages']['count'] ),
+					size_format( $bytes )
+				)
+			)
+		);
+	}
+
+	/**
+	 * Render the per-type asset table with totals.
+	 *
+	 * @param array $report Report data from the job result.
+	 */
+	private static function render_report_assets( array $report ): void {
+		if ( empty( $report['assets'] ) || ! is_array( $report['assets'] ) ) {
+			return;
+		}
+
+		$labels = array(
+			'images' => __( 'Images', 'make-it-static' ),
+			'css'    => __( 'CSS', 'make-it-static' ),
+			'js'     => __( 'JS', 'make-it-static' ),
+			'fonts'  => __( 'Fonts', 'make-it-static' ),
+			'videos' => __( 'Videos', 'make-it-static' ),
+			'html'   => __( 'HTML', 'make-it-static' ),
+			'other'  => __( 'Other', 'make-it-static' ),
+		);
+
+		$rows = array();
+		foreach ( $labels as $type => $label ) {
+			$asset = $report['assets'][ $type ] ?? null;
+			if ( ! is_array( $asset ) || empty( $asset['count'] ) || ! is_numeric( $asset['count'] ) ) {
+				continue;
+			}
+			$rows[ $type ] = array(
+				'label'    => $label,
+				'count'    => (int) $asset['count'],
+				'original' => isset( $asset['original_bytes'] ) && is_numeric( $asset['original_bytes'] ) ? (int) $asset['original_bytes'] : 0,
+				'final'    => isset( $asset['final_bytes'] ) && is_numeric( $asset['final_bytes'] ) ? (int) $asset['final_bytes'] : 0,
+			);
+		}
+
+		if ( empty( $rows ) ) {
+			return;
+		}
+
+		$totals = ( isset( $report['totals'] ) && is_array( $report['totals'] ) ) ? $report['totals'] : array();
+		?>
+		<table class="mis-report-assets">
+			<thead>
+				<tr>
+					<th scope="col"><?php esc_html_e( 'Type', 'make-it-static' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Files', 'make-it-static' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Original', 'make-it-static' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Final', 'make-it-static' ); ?></th>
+					<th scope="col"><?php echo esc_html_x( 'Δ%', 'table column: size change in percent', 'make-it-static' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $rows as $type => $asset ) : ?>
+					<tr>
+						<td><?php echo esc_html( $asset['label'] ); ?></td>
+						<td><?php echo esc_html( number_format_i18n( $asset['count'] ) ); ?></td>
+						<td><?php echo esc_html( size_format( $asset['original'] ) ); ?></td>
+						<td><?php echo esc_html( size_format( $asset['final'] ) ); ?></td>
+						<td class="<?php echo esc_attr( self::delta_class( $asset['original'], $asset['final'] ) ); ?>">
+							<?php echo esc_html( self::format_delta_pct( $asset['original'], $asset['final'] ) ); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				<?php if ( isset( $totals['files'], $totals['original_bytes'], $totals['final_bytes'] ) && is_numeric( $totals['files'] ) && is_numeric( $totals['original_bytes'] ) && is_numeric( $totals['final_bytes'] ) ) : ?>
+					<tr class="mis-report-totals">
+						<td><?php esc_html_e( 'Total', 'make-it-static' ); ?></td>
+						<td><?php echo esc_html( number_format_i18n( (int) $totals['files'] ) ); ?></td>
+						<td><?php echo esc_html( size_format( (int) $totals['original_bytes'] ) ); ?></td>
+						<td><?php echo esc_html( size_format( (int) $totals['final_bytes'] ) ); ?></td>
+						<td class="<?php echo esc_attr( self::delta_class( (int) $totals['original_bytes'], (int) $totals['final_bytes'] ) ); ?>">
+							<?php
+							if ( isset( $totals['saved_pct'] ) && is_numeric( $totals['saved_pct'] ) ) {
+								echo esc_html(
+									sprintf(
+										/* translators: %s: percentage of bytes saved, e.g. "42.5". */
+										__( '−%s%%', 'make-it-static' ),
+										number_format_i18n( (float) $totals['saved_pct'], 1 )
+									)
+								);
+							} else {
+								echo esc_html( self::format_delta_pct( (int) $totals['original_bytes'], (int) $totals['final_bytes'] ) );
+							}
+							?>
+						</td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+		<?php
+
+		$videos = $report['assets']['videos'] ?? null;
+		if ( is_array( $videos ) && ! empty( $videos['converted'] ) && is_numeric( $videos['converted'] ) ) {
+			$cache_hits = isset( $videos['cache_hits'] ) && is_numeric( $videos['cache_hits'] ) ? (int) $videos['cache_hits'] : 0;
+			printf(
+				'<p class="mis-report-videos%s">%s</p>',
+				esc_attr( $cache_hits > 0 ? ' mis-report-cache' : '' ),
+				esc_html(
+					sprintf(
+						/* translators: %1$d: number of videos converted, %2$d: number of cache hits. */
+						__( '%1$d converted, %2$d cache hits', 'make-it-static' ),
+						(int) $videos['converted'],
+						$cache_hits
+					)
+				)
+			);
+		}
+	}
+
+	/**
+	 * Render the per-step timing line.
+	 *
+	 * @param array $report Report data from the job result.
+	 */
+	private static function render_report_steps( array $report ): void {
+		if ( empty( $report['steps_seconds'] ) || ! is_array( $report['steps_seconds'] ) ) {
+			return;
+		}
+
+		$labels = array(
+			'scrape'      => _x( 'scrape', 'build step', 'make-it-static' ),
+			'postprocess' => _x( 'postprocess', 'build step', 'make-it-static' ),
+			'optimize'    => _x( 'optimize', 'build step', 'make-it-static' ),
+			'upload'      => _x( 'upload', 'build step', 'make-it-static' ),
+		);
+
+		$parts = array();
+		foreach ( $labels as $step => $label ) {
+			if ( ! isset( $report['steps_seconds'][ $step ] ) || ! is_numeric( $report['steps_seconds'][ $step ] ) ) {
+				continue;
+			}
+			$parts[] = sprintf(
+				/* translators: %1$s: build step name, %2$s: duration in seconds. */
+				__( '%1$s %2$ss', 'make-it-static' ),
+				$label,
+				number_format_i18n( (float) $report['steps_seconds'][ $step ], 1 )
+			);
+		}
+
+		if ( empty( $parts ) ) {
+			return;
+		}
+
+		printf(
+			'<p class="mis-report-steps">%s</p>',
+			esc_html( implode( ' · ', $parts ) )
+		);
+	}
+
+	/**
+	 * Render the list of top size savings (at most 10 entries).
+	 *
+	 * @param array $report Report data from the job result.
+	 */
+	private static function render_report_top_savings( array $report ): void {
+		if ( empty( $report['top_savings'] ) || ! is_array( $report['top_savings'] ) ) {
+			return;
+		}
+
+		$entries = array_slice( $report['top_savings'], 0, 10 );
+		$items   = array();
+		foreach ( $entries as $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['path'] ) || ! is_string( $entry['path'] ) ) {
+				continue;
+			}
+			$original = isset( $entry['original_bytes'] ) && is_numeric( $entry['original_bytes'] ) ? (int) $entry['original_bytes'] : 0;
+			$final    = isset( $entry['final_bytes'] ) && is_numeric( $entry['final_bytes'] ) ? (int) $entry['final_bytes'] : 0;
+			if ( $original <= 0 ) {
+				continue;
+			}
+			$saved   = round( ( 1 - $final / $original ) * 100, 1 );
+			$items[] = array(
+				'path'  => $entry['path'],
+				'sizes' => sprintf(
+					/* translators: %1$s: original size, %2$s: final size, %3$s: percentage saved. */
+					__( '%1$s → %2$s (−%3$s%%)', 'make-it-static' ),
+					size_format( $original ),
+					size_format( $final ),
+					number_format_i18n( $saved, 1 )
+				),
+			);
+		}
+
+		if ( empty( $items ) ) {
+			return;
+		}
+
+		echo '<p class="mis-report-top-label">' . esc_html__( 'Top savings', 'make-it-static' ) . '</p>';
+		echo '<ul class="mis-report-top">';
+		foreach ( $items as $item ) {
+			echo '<li><code>' . esc_html( $item['path'] ) . '</code> ' . esc_html( $item['sizes'] ) . '</li>';
+		}
+		echo '</ul>';
+	}
+
+	/**
+	 * Format the size change between two byte counts as a signed percentage.
+	 *
+	 * Negative means the file got smaller (bytes saved).
+	 *
+	 * @param int $original_bytes Original size in bytes.
+	 * @param int $final_bytes    Final size in bytes.
+	 */
+	private static function format_delta_pct( int $original_bytes, int $final_bytes ): string {
+		if ( $original_bytes <= 0 ) {
+			return '—';
+		}
+		$delta = round( ( $final_bytes / $original_bytes - 1 ) * 100, 1 );
+		if ( 0.0 === $delta ) {
+			return '0%';
+		}
+		return sprintf( '%+.1f%%', $delta );
+	}
+
+	/**
+	 * CSS class for a delta value: green when bytes were saved.
+	 *
+	 * @param int $original_bytes Original size in bytes.
+	 * @param int $final_bytes    Final size in bytes.
+	 */
+	private static function delta_class( int $original_bytes, int $final_bytes ): string {
+		$class = 'mis-report-delta';
+		if ( $original_bytes > 0 && $final_bytes < $original_bytes ) {
+			$class .= ' mis-report-delta--saved';
+		}
+		return $class;
 	}
 
 	/**

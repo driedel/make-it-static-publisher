@@ -3,13 +3,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Make it Static 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/make-it-static\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/w\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-23T13:22:17+00:00\n"
+"POT-Creation-Date: 2026-11-25T15:44:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: make-it-static\n"
@@ -138,68 +138,175 @@ msgstr ""
 msgid "Invalidation"
 msgstr ""
 
-#: includes/class-mis-admin.php:229
+#: includes/class-mis-admin.php:230
 msgid "Finished."
 msgstr ""
 
-#: includes/class-mis-admin.php:235
+#: includes/class-mis-admin.php:236
 msgid "Job failed — check server logs"
 msgstr ""
 
-#: includes/class-mis-admin.php:239
+#: includes/class-mis-admin.php:240
 msgid "Check the Make it Static worker logs (e.g. docker compose logs worker)."
 msgstr ""
 
-#: includes/class-mis-admin.php:247
+#: includes/class-mis-admin.php:248
 msgid "Results expire server-side 1 hour after a job ends; the outcome is no longer available."
 msgstr ""
 
+#. translators: %1$s: number of pages, %2$s: total page size.
+#: includes/class-mis-admin.php:301
+#, php-format
+msgid "Pages scraped: %1$s (%2$s)"
+msgstr ""
+
+#: includes/class-mis-admin.php:320
+msgid "Images"
+msgstr ""
+
+#: includes/class-mis-admin.php:321
+msgid "CSS"
+msgstr ""
+
+#: includes/class-mis-admin.php:322
+msgid "JS"
+msgstr ""
+
+#: includes/class-mis-admin.php:323
+msgid "Fonts"
+msgstr ""
+
+#: includes/class-mis-admin.php:324
+msgid "Videos"
+msgstr ""
+
+#: includes/class-mis-admin.php:325
+msgid "HTML"
+msgstr ""
+
+#: includes/class-mis-admin.php:326
+msgid "Other"
+msgstr ""
+
+#: includes/class-mis-admin.php:352
+msgid "Type"
+msgstr ""
+
+#: includes/class-mis-admin.php:353
+msgid "Files"
+msgstr ""
+
+#: includes/class-mis-admin.php:354
+msgid "Original"
+msgstr ""
+
+#: includes/class-mis-admin.php:355
+msgid "Final"
+msgstr ""
+
+#: includes/class-mis-admin.php:356
+msgctxt "table column: size change in percent"
+msgid "Δ%"
+msgstr ""
+
+#: includes/class-mis-admin.php:373
+msgid "Total"
+msgstr ""
+
+#. translators: %s: percentage of bytes saved, e.g. "42.5".
+#: includes/class-mis-admin.php:383
+#, php-format
+msgid "−%s%%"
+msgstr ""
+
+#. translators: %1$d: number of videos converted, %2$d: number of cache hits.
+#: includes/class-mis-admin.php:407
+#, php-format
+msgid "%1$d converted, %2$d cache hits"
+msgstr ""
+
+#: includes/class-mis-admin.php:427
+msgctxt "build step"
+msgid "scrape"
+msgstr ""
+
+#: includes/class-mis-admin.php:428
+msgctxt "build step"
+msgid "postprocess"
+msgstr ""
+
+#: includes/class-mis-admin.php:429
+msgctxt "build step"
+msgid "optimize"
+msgstr ""
+
+#: includes/class-mis-admin.php:430
+msgctxt "build step"
+msgid "upload"
+msgstr ""
+
+#. translators: %1$s: build step name, %2$s: duration in seconds.
+#: includes/class-mis-admin.php:440
+#, php-format
+msgid "%1$s %2$ss"
+msgstr ""
+
+#. translators: %1$s: original size, %2$s: final size, %3$s: percentage saved.
+#: includes/class-mis-admin.php:482
+#, php-format
+msgid "%1$s → %2$s (−%3$s%%)"
+msgstr ""
+
+#: includes/class-mis-admin.php:494
+msgid "Top savings"
+msgstr ""
+
 #. translators: %s: human-readable time difference.
-#: includes/class-mis-admin.php:286
+#: includes/class-mis-admin.php:566
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/class-mis-admin.php:307
+#: includes/class-mis-admin.php:587
 msgid "A static publish job is running…"
 msgstr ""
 
-#: includes/class-mis-admin.php:309
-#: includes/class-mis-admin.php:320
+#: includes/class-mis-admin.php:589
+#: includes/class-mis-admin.php:600
 msgid "View jobs"
 msgstr ""
 
-#: includes/class-mis-admin.php:318
+#: includes/class-mis-admin.php:598
 msgid "The most recent static publish job failed."
 msgstr ""
 
-#: includes/class-mis-admin.php:338
+#: includes/class-mis-admin.php:618
 msgid "Static: running"
 msgstr ""
 
-#: includes/class-mis-admin.php:378
-#: includes/class-mis-admin.php:421
+#: includes/class-mis-admin.php:658
+#: includes/class-mis-admin.php:701
 msgid "Permission denied."
 msgstr ""
 
-#: includes/class-mis-admin.php:384
-#: includes/class-mis-admin.php:427
+#: includes/class-mis-admin.php:664
+#: includes/class-mis-admin.php:707
 msgid "Job not found."
 msgstr ""
 
-#: includes/class-mis-admin.php:388
+#: includes/class-mis-admin.php:668
 msgid "This job is no longer active."
 msgstr ""
 
-#: includes/class-mis-admin.php:409
+#: includes/class-mis-admin.php:689
 msgid "Job cancelled."
 msgstr ""
 
-#: includes/class-mis-admin.php:431
+#: includes/class-mis-admin.php:711
 msgid "Only failed or expired jobs can be retried."
 msgstr ""
 
-#: includes/class-mis-admin.php:443
+#: includes/class-mis-admin.php:723
 msgid "Job re-queued."
 msgstr ""
 
