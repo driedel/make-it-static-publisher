@@ -31,6 +31,7 @@ class MIS_Settings {
 			'options'                    => array_fill_keys( self::OPTION_FLAGS, true ),
 			'retry_count'                => 3,
 			'debounce_interval'          => 60,
+			'auto_publish'               => 'always',
 			'post_types'                 => array( 'post', 'page' ),
 		);
 	}
@@ -189,6 +190,12 @@ class MIS_Settings {
 
 		$debounce                 = isset( $input['debounce_interval'] ) ? absint( $input['debounce_interval'] ) : self::defaults()['debounce_interval'];
 		$out['debounce_interval'] = max( 5, $debounce );
+
+		$auto_publish = isset( $input['auto_publish'] ) ? sanitize_key( (string) $input['auto_publish'] ) : '';
+		if ( ! in_array( $auto_publish, array( 'always', 'first_publish', 'manual' ), true ) ) {
+			$auto_publish = self::defaults()['auto_publish'];
+		}
+		$out['auto_publish'] = $auto_publish;
 
 		$post_types        = isset( $input['post_types'] ) && is_array( $input['post_types'] )
 			? array_map( 'sanitize_key', $input['post_types'] )
@@ -360,7 +367,7 @@ class MIS_Settings {
 							<input type="url" class="regular-text" id="mis-scrape-url-base" name="mis_settings[scrape_url_base]"
 								value="<?php echo esc_attr( $settings['scrape_url_base'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'Optional. Overrides the site URL sent to the API — useful when the service must reach this site through an internal address. Defaults to the WordPress home URL.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Optional. Overrides the URL the service uses to scrape this site — set it only when the service must reach the site through an internal address (e.g. a Docker network alias). The URL host becomes the site identity on the service (the S3 prefix / CloudFront origin path): publishing with a different host deploys to a different prefix. Defaults to the WordPress home URL.', 'make-it-static' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -426,6 +433,21 @@ class MIS_Settings {
 								value="<?php echo esc_attr( (string) $settings['debounce_interval'] ); ?>" />
 							<p class="description">
 								<?php esc_html_e( 'Publish triggers are coalesced and run this many seconds after the last change (minimum 5).', 'make-it-static' ); ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="mis-auto-publish"><?php esc_html_e( 'Automatic publish', 'make-it-static' ); ?></label>
+						</th>
+						<td>
+							<select id="mis-auto-publish" name="mis_settings[auto_publish]">
+								<option value="always" <?php selected( $settings['auto_publish'], 'always' ); ?>><?php esc_html_e( 'Every save', 'make-it-static' ); ?></option>
+								<option value="first_publish" <?php selected( $settings['auto_publish'], 'first_publish' ); ?>><?php esc_html_e( 'Only first publish', 'make-it-static' ); ?></option>
+								<option value="manual" <?php selected( $settings['auto_publish'], 'manual' ); ?>><?php esc_html_e( 'Manual only', 'make-it-static' ); ?></option>
+							</select>
+							<p class="description">
+								<?php esc_html_e( 'Every save: any save of a published post queues a publish. Only first publish: updating an already-published post does not trigger. Manual only: nothing automatic — use the publish buttons. Trashing or deleting content publishes the whole site unless Manual only is selected.', 'make-it-static' ); ?>
 							</p>
 						</td>
 					</tr>

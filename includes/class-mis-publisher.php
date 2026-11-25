@@ -37,6 +37,14 @@ class MIS_Publisher {
 		if ( 'publish' !== $new_status ) {
 			return;
 		}
+		$mode = (string) MIS_Settings::get( 'auto_publish', 'always' );
+		if ( 'manual' === $mode ) {
+			return;
+		}
+		if ( 'first_publish' === $mode && 'publish' === $old_status ) {
+			// Updates of an already-published post do not trigger in this mode.
+			return;
+		}
 		if ( ! $post || ! in_array( $post->post_type, self::enabled_post_types(), true ) ) {
 			return;
 		}
@@ -52,6 +60,9 @@ class MIS_Publisher {
 	 * @param int $post_id Post ID.
 	 */
 	public static function on_remove_post( int $post_id ): void {
+		if ( 'manual' === (string) MIS_Settings::get( 'auto_publish', 'always' ) ) {
+			return;
+		}
 		$post = get_post( $post_id );
 		if ( ! $post || ! in_array( $post->post_type, self::enabled_post_types(), true ) ) {
 			return;

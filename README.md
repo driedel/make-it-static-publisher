@@ -126,17 +126,18 @@ All settings live under **Settings → Make it Static** (stored in a single `mis
 | --- | --- | --- |
 | API base URL | `http://make-it-static-api:8000` | Base URL of the Make it Static service API. |
 | HMAC secret | *(empty)* | Shared secret for request signing. The `MAKE_IT_STATIC_HMAC_SECRET` PHP constant in `wp-config.php` takes precedence when defined. |
-| Scrape URL base | *(empty)* | Optional override for the URL sent to the service (e.g. an internal hostname like `http://site_nginx`). When empty, the site's home URL is used. |
+| Scrape URL base | *(empty)* | Optional override for the URL sent to the service (e.g. an internal hostname like `http://site_nginx`). When empty, the site's home URL is used. The URL's host becomes the site's identity on the service (the S3 prefix / CloudFront origin path) — publishing with a different host deploys to a different prefix, so only set this when the service cannot reach the public URL. |
 | CloudFront distribution ID | *(empty)* | When set, the service creates an invalidation after upload. |
 | Extra CDN domains | *(empty)* | One domain per line; additional CDN hostnames rewritten in the static output. The `home_url()` host is added automatically when it differs from the scrape base host, so absolute URLs stored in post content are downloaded and rewritten too. |
 | Optimization options | all on | Toggle bundle CSS, bundle JS, compress images, compress HTML, convert fonts. |
 | Post types | post, page | Which post types trigger a publish when published or updated. |
+| Automatic publish | Every save | When content changes trigger a publish: *Every save* (any save of a published post), *Only first publish* (updates don't trigger) or *Manual only* (nothing automatic). Trashing/deleting content publishes the whole site unless *Manual only* is selected. |
 | Retry count | 3 | How many times a failed job is automatically re-published. |
 | Debounce interval | 60 s | How long to wait after the last change before triggering a publish, so rapid edits coalesce. |
 
 ## How publishing works
 
-- **Triggers**: publishing or updating a post of an enabled post type, and trashing or deleting content (which triggers a whole-site re-publish). A manual **Publish now** action is also available.
+- **Triggers**: publishing or updating a post of an enabled post type, and trashing or deleting content (which triggers a whole-site re-publish) — both governed by the *Automatic publish* setting. Manual triggers (the **Republish whole site** button, the **Publish static** row action, meta box and editor sidebar buttons) are always available.
 - **Debounce**: triggers don't publish immediately. They set a pending flag and schedule a single WP-Cron event `debounce_interval` seconds out; further triggers within that window just re-arm it.
 - **Coalescing**: the service processes one job at a time per site, and the plugin enforces at most one active job. If changes arrive while a job is running, at most one follow-up publish is queued and starts after the active job finishes.
 - **Job tracking**: each publish inserts a row into the `{prefix}_mis_jobs` table. A WP-Cron task polls every 30 seconds until the job reaches a terminal state (`finished`, `failed`, `stopped`, `canceled`) or its result has expired server-side (results are kept for about an hour).
