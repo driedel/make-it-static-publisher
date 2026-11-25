@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- The plugin now automatically adds the site's `home_url()` host (with port, when non-standard) to `extra_cdn` when it differs from the scrape base host, so post content carrying absolute public-host URLs is downloaded and rewritten by the service.
+- Job build report on the jobs screen: pages scraped, per-type asset sizes (original → optimized) with savings percentage, per-step timings, video conversion/cache stats, and top savings — rendered from the `report` key of the job result (requires a service version that emits it; older results render unchanged).
+
 ## [1.0.0] - 2026-11-23
 
 ### Added
