@@ -1,0 +1,157 @@
+/**
+ * Make it Static — admin styles (jobs page).
+ */
+
+.mis-jobs .mis-jobs-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 16px 0;
+}
+
+.mis-jobs-table {
+	margin-top: 8px;
+}
+
+.mis-jobs-table .mis-col-job {
+	width: 26%;
+}
+
+.mis-jobs-table .mis-col-status {
+	width: 10%;
+}
+
+.mis-jobs-table .mis-col-attempts {
+	width: 8%;
+}
+
+.mis-jobs-table .mis-col-date {
+	width: 10%;
+}
+
+.mis-jobs-table .mis-col-actions {
+	width: 12%;
+	white-space: nowrap;
+}
+
+.mis-job-id {
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.mis-job-meta {
+	color: #646970;
+	font-size: 12px;
+	margin-top: 2px;
+}
+
+.mis-job-url {
+	word-break: break-all;
+}
+
+/* Status badges */
+.mis-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+.mis-badge--running {
+	background: #e5f0fa;
+	color: #135e96;
+}
+
+.mis-badge--finished {
+	background: #ecf7ed;
+	color: #21702b;
+}
+
+.mis-badge--failed {
+	background: #fcf0f1;
+	color: #b32d2e;
+}
+
+.mis-badge--expired {
+	background: #f0f0f1;
+	color: #646970;
+}
+
+.mis-badge--pulse {
+	animation: mis-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes mis-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.45;
+	}
+}
+
+/* Details cell */
+.mis-result {
+	margin: 0;
+	font-size: 12px;
+}
+
+.mis-result-row {
+	display: flex;
+	gap: 6px;
+}
+
+.mis-result-row dt {
+	font-weight: 600;
+	margin: 0;
+}
+
+.mis-result-row dd {
+	margin: 0;
+	word-break: break-all;
+}
+
+.mis-error {
+	color: #b32d2e;
+	margin: 0 0 4px;
+	font-weight: 600;
+}
+
+.mis-hint {
+	background: #fcf9e8;
+	border-left: 3px solid #dba617;
+	color: #646970;
+	margin: 0;
+	padding: 6px 8px;
+	font-size: 12px;
+}
+
+.mis-note {
+	color: #646970;
+	font-style: italic;
+	margin: 0;
+	font-size: 12px;
+}
+
+/* Action feedback */
+.mis-action-msg {
+	font-size: 12px;
+	margin-left: 6px;
+}
+
+.mis-action-msg.is-error {
+	color: #b32d2e;
+}
+
+.mis-action-msg.is-success {
+	color: #21702b;
+}
+
+.mis-action[disabled],
+#mis-republish-site[disabled] {
+	opacity: 0.6;
+	cursor: default;
+}

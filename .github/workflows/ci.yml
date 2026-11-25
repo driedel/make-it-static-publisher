@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  phpcs:
+    name: PHP CodeSniffer (WordPress-Core)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: Install WordPress Coding Standards
+        run: |
+          composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --no-interaction \
+            squizlabs/php_codesniffer \
+            dealerdirect/phpcodesniffer-composer-installer \
+            wp-coding-standards/wpcs
+
+      - name: Run PHPCS
+        run: |
+          export PATH="$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:$PATH"
+          phpcs --standard=WordPress-Core --extensions=php \
+            --ignore=.wordpress-org,.git,node_modules,vendor \
+            .
+
+  plugin-check:
+    name: WordPress Plugin Check
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli, zip
+
+      - name: Install WP-CLI
+        run: |
+          curl -fsSL -o /tmp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x /tmp/wp-cli.phar
+          sudo mv /tmp/wp-cli.phar /usr/local/bin/wp
+          wp --info --allow-root
+
+      - name: Create WordPress install
+        run: |
+          mkdir -p /tmp/wordpress
+          cd /tmp/wordpress
+          wp core download --allow-root
+          wp config create \
+            --dbname=wordpress \
+            --dbuser=root \
+            --dbpass=root \
+            --dbhost=127.0.0.1:3306 \
+            --allow-root
+          wp core install \
+            --url=http://example.org \
+            --title=CI \
+            --admin_user=admin \
+            --admin_password=admin \
+            --admin_email=ci@example.org \
+            --skip-email \
+            --allow-root
+
+      - name: Copy plugin into wp-content/plugins
+        run: |
+          mkdir -p /tmp/wordpress/wp-content/plugins/make-it-static
+          rsync -a --exclude='.git' --exclude='.wordpress-org' --exclude='.github' \
+            --exclude='.distignore' --exclude='README.md' --exclude='CHANGELOG.md' \
+            "$GITHUB_WORKSPACE"/ /tmp/wordpress/wp-content/plugins/make-it-static/
+
+      - name: Install and activate plugin-check
+        run: |
+          cd /tmp/wordpress
+          wp plugin install plugin-check --activate --allow-root
+
+      - name: Run Plugin Check
+        run: |
+          cd /tmp/wordpress
+          wp plugin activate make-it-static --allow-root
+          wp plugin check make-it-static --exclude-directories=.wordpress-org --format=json --allow-root

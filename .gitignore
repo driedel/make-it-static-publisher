@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs / editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Composer (dev tooling only; nothing is vendored in this repo)
+/vendor/
+composer.phar
+composer.lock
+
+# Node (release ZIP tooling, if ever added)
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# PHP tooling artifacts
+/phpunit.xml
+/phpunit.xml.dist
+/.phpunit.result.cache
+/build/
+/coverage/
+
+# WordPress local test installs
+/wp-core/
+/wp-tests-config.php
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.orig

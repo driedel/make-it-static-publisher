@@ -1,0 +1,52 @@
+# Deploy to WordPress.org on release.
+#
+# Release discipline (SemVer): the git tag, the `Version:` header in
+# make-it-static.php, and the `Stable tag:` in readme.txt must all match
+# (e.g. 1.0.0). The deploy action extracts the version from the header and
+# tags that SVN version, so a mismatch breaks the release.
+name: Deploy to WordPress.org
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Push to SVN and attach ZIP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to WordPress.org SVN
+        uses: 10up/action-wordpress-plugin-deploy@v1
+        with:
+          generate-zip: true
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: make-it-static
+          VERSION: ${{ github.event.release.tag_name }}
+
+      - name: Attach ZIP to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.workspace }}/make-it-static.zip
+
+  assets:
+    name: Sync readme.txt and assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update readme.txt and .wordpress-org assets
+        uses: 10up/action-wordpress-plugin-asset-update@v1
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: make-it-static
+          VERSION: ${{ github.event.release.tag_name }}

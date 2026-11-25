@@ -1,0 +1,429 @@
+# Copyright (C) 2026 Danilo Riedel
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Make it Static 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/make-it-static\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-23T13:22:17+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: make-it-static\n"
+
+#. Plugin Name of the plugin
+#: make-it-static.php
+#: includes/class-mis-admin.php:34
+#: includes/class-mis-admin.php:35
+#: includes/class-mis-post-ui.php:155
+#: includes/class-mis-settings.php:127
+#: includes/class-mis-settings.php:128
+#: assets/js/mis-editor.js:74
+msgid "Make it Static"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: make-it-static.php
+msgid "https://github.com/driedel/make-it-static-wp-plugin"
+msgstr ""
+
+#. Description of the plugin
+#: make-it-static.php
+msgid "Publishes your WordPress site as a static site via an external Make it Static API service (scrapes, optimizes assets, uploads to S3, optionally invalidates CloudFront)."
+msgstr ""
+
+#. Author of the plugin
+#: make-it-static.php
+msgid "Danilo Riedel"
+msgstr ""
+
+#: includes/class-mis-admin.php:76
+msgid "Working…"
+msgstr ""
+
+#: includes/class-mis-admin.php:77
+msgid "The request failed. Please try again."
+msgstr ""
+
+#: includes/class-mis-admin.php:78
+msgid "Cancel this job?"
+msgstr ""
+
+#: includes/class-mis-admin.php:79
+msgid "Publish job queued. Reloading…"
+msgstr ""
+
+#: includes/class-mis-admin.php:90
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/class-mis-admin.php:97
+msgid "Make it Static — Jobs"
+msgstr ""
+
+#: includes/class-mis-admin.php:101
+msgid "Republish whole site"
+msgstr ""
+
+#: includes/class-mis-admin.php:105
+msgid "Settings"
+msgstr ""
+
+#: includes/class-mis-admin.php:110
+msgid "No publish jobs yet."
+msgstr ""
+
+#: includes/class-mis-admin.php:115
+msgid "Job"
+msgstr ""
+
+#: includes/class-mis-admin.php:116
+msgid "Status"
+msgstr ""
+
+#: includes/class-mis-admin.php:117
+msgid "Attempts"
+msgstr ""
+
+#: includes/class-mis-admin.php:118
+msgid "Created"
+msgstr ""
+
+#: includes/class-mis-admin.php:119
+msgid "Updated"
+msgstr ""
+
+#: includes/class-mis-admin.php:120
+msgid "Details"
+msgstr ""
+
+#: includes/class-mis-admin.php:121
+msgid "Actions"
+msgstr ""
+
+#. translators: %d: post ID.
+#: includes/class-mis-admin.php:157
+#, php-format
+msgid "Post #%d"
+msgstr ""
+
+#: includes/class-mis-admin.php:183
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-mis-admin.php:188
+msgid "Retry"
+msgstr ""
+
+#: includes/class-mis-admin.php:213
+msgid "Files uploaded"
+msgstr ""
+
+#: includes/class-mis-admin.php:214
+msgid "Bucket"
+msgstr ""
+
+#: includes/class-mis-admin.php:215
+msgid "Site"
+msgstr ""
+
+#: includes/class-mis-admin.php:216
+msgid "Prefix"
+msgstr ""
+
+#: includes/class-mis-admin.php:217
+msgid "Invalidation"
+msgstr ""
+
+#: includes/class-mis-admin.php:229
+msgid "Finished."
+msgstr ""
+
+#: includes/class-mis-admin.php:235
+msgid "Job failed — check server logs"
+msgstr ""
+
+#: includes/class-mis-admin.php:239
+msgid "Check the Make it Static worker logs (e.g. docker compose logs worker)."
+msgstr ""
+
+#: includes/class-mis-admin.php:247
+msgid "Results expire server-side 1 hour after a job ends; the outcome is no longer available."
+msgstr ""
+
+#. translators: %s: human-readable time difference.
+#: includes/class-mis-admin.php:286
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/class-mis-admin.php:307
+msgid "A static publish job is running…"
+msgstr ""
+
+#: includes/class-mis-admin.php:309
+#: includes/class-mis-admin.php:320
+msgid "View jobs"
+msgstr ""
+
+#: includes/class-mis-admin.php:318
+msgid "The most recent static publish job failed."
+msgstr ""
+
+#: includes/class-mis-admin.php:338
+msgid "Static: running"
+msgstr ""
+
+#: includes/class-mis-admin.php:378
+#: includes/class-mis-admin.php:421
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-mis-admin.php:384
+#: includes/class-mis-admin.php:427
+msgid "Job not found."
+msgstr ""
+
+#: includes/class-mis-admin.php:388
+msgid "This job is no longer active."
+msgstr ""
+
+#: includes/class-mis-admin.php:409
+msgid "Job cancelled."
+msgstr ""
+
+#: includes/class-mis-admin.php:431
+msgid "Only failed or expired jobs can be retried."
+msgstr ""
+
+#: includes/class-mis-admin.php:443
+msgid "Job re-queued."
+msgstr ""
+
+#: includes/class-mis-api-client.php:80
+msgid "Could not encode the publish request."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-mis-api-client.php:183
+#, php-format
+msgid "Unexpected response from the API (HTTP %d)."
+msgstr ""
+
+#: includes/class-mis-poller.php:39
+msgid "Every 30 seconds (Make it Static)"
+msgstr ""
+
+#: includes/class-mis-poller.php:104
+msgid "Job row has no remote job ID."
+msgstr ""
+
+#: includes/class-mis-poller.php:165
+msgid "Job failed — check server logs. On the Make it Static host, run `docker compose logs worker` for details."
+msgstr ""
+
+#: includes/class-mis-post-ui.php:52
+#: includes/class-mis-post-ui.php:187
+#: assets/js/mis-editor.js:92
+msgid "Publish static"
+msgstr ""
+
+#: includes/class-mis-post-ui.php:74
+#: includes/class-mis-post-ui.php:274
+msgid "You are not allowed to publish this post."
+msgstr ""
+
+#. translators: %d: job row ID.
+#: includes/class-mis-post-ui.php:127
+#: includes/class-mis-post-ui.php:294
+#: assets/js/mis-editor.js:47
+#, php-format,js-format
+msgid "Static publish queued (job #%d)."
+msgstr ""
+
+#: includes/class-mis-post-ui.php:140
+#: includes/class-mis-post-ui.php:218
+#: assets/js/mis-editor.js:58
+#: assets/js/mis-editor.js:66
+msgid "The static publish request failed."
+msgstr ""
+
+#: includes/class-mis-post-ui.php:169
+msgid "No publish job recorded for this post yet."
+msgstr ""
+
+#. translators: 1: job status, 2: last update datetime.
+#: includes/class-mis-post-ui.php:175
+#, php-format
+msgid "Last job: %1$s (%2$s)"
+msgstr ""
+
+#: includes/class-mis-post-ui.php:217
+msgid "Queuing publish…"
+msgstr ""
+
+#: includes/class-mis-post-ui.php:277
+msgid "You are not allowed to publish the whole site."
+msgstr ""
+
+#: includes/class-mis-publisher.php:127
+msgid "Cannot determine the permalink for this post."
+msgstr ""
+
+#: includes/class-mis-publisher.php:156
+#: includes/class-mis-publisher.php:200
+msgid "The service did not return a job ID."
+msgstr ""
+
+#: includes/class-mis-publisher.php:170
+msgid "Could not store the publish job."
+msgstr ""
+
+#: includes/class-mis-publisher.php:189
+msgid "The stored job payload is missing or invalid."
+msgstr ""
+
+#: includes/class-mis-publisher.php:215
+msgid "Could not update the publish job."
+msgstr ""
+
+#: includes/class-mis-settings.php:227
+msgid "Testing connection…"
+msgstr ""
+
+#: includes/class-mis-settings.php:228
+msgid "The connection test failed unexpectedly."
+msgstr ""
+
+#: includes/class-mis-settings.php:254
+msgid "You are not allowed to do this."
+msgstr ""
+
+#. translators: %s: error message returned by the HTTP layer.
+#: includes/class-mis-settings.php:269
+#, php-format
+msgid "Connection failed: %s"
+msgstr ""
+
+#: includes/class-mis-settings.php:278
+msgid "Connection successful. The API is reachable and the job queue is ready."
+msgstr ""
+
+#: includes/class-mis-settings.php:279
+msgid "The API is reachable, but it reports that Redis is unavailable — publish jobs will not run until Redis is back."
+msgstr ""
+
+#: includes/class-mis-settings.php:304
+msgid "Bundle CSS"
+msgstr ""
+
+#: includes/class-mis-settings.php:305
+msgid "Bundle JavaScript"
+msgstr ""
+
+#: includes/class-mis-settings.php:306
+msgid "Compress images"
+msgstr ""
+
+#: includes/class-mis-settings.php:307
+msgid "Compress HTML"
+msgstr ""
+
+#: includes/class-mis-settings.php:308
+msgid "Convert fonts"
+msgstr ""
+
+#: includes/class-mis-settings.php:319
+msgid "API base URL"
+msgstr ""
+
+#: includes/class-mis-settings.php:325
+msgid "Base URL of the Make it Static API service."
+msgstr ""
+
+#: includes/class-mis-settings.php:329
+msgid "Test connection"
+msgstr ""
+
+#: includes/class-mis-settings.php:337
+msgid "HMAC secret"
+msgstr ""
+
+#: includes/class-mis-settings.php:342
+msgid "Defined in wp-config.php"
+msgstr ""
+
+#: includes/class-mis-settings.php:344
+msgid "The secret is defined via the MAKE_IT_STATIC_HMAC_SECRET constant in wp-config.php and cannot be changed here."
+msgstr ""
+
+#: includes/class-mis-settings.php:350
+msgid "Shared secret used to sign publish requests. Leave empty to keep the current secret."
+msgstr ""
+
+#: includes/class-mis-settings.php:357
+msgid "Scrape URL base"
+msgstr ""
+
+#: includes/class-mis-settings.php:363
+msgid "Optional. Overrides the site URL sent to the API — useful when the service must reach this site through an internal address. Defaults to the WordPress home URL."
+msgstr ""
+
+#: includes/class-mis-settings.php:369
+msgid "CloudFront distribution ID"
+msgstr ""
+
+#: includes/class-mis-settings.php:375
+msgid "Optional. When set, the API creates a cache invalidation after each publish."
+msgstr ""
+
+#: includes/class-mis-settings.php:381
+msgid "Extra CDN domains"
+msgstr ""
+
+#: includes/class-mis-settings.php:386
+msgid "Optional. One domain per line; asset URLs on these domains are treated as local."
+msgstr ""
+
+#: includes/class-mis-settings.php:391
+msgid "Optimizations"
+msgstr ""
+
+#: includes/class-mis-settings.php:403
+msgid "Checked optimizations are sent to the API as enabled."
+msgstr ""
+
+#: includes/class-mis-settings.php:410
+msgid "Retry count"
+msgstr ""
+
+#: includes/class-mis-settings.php:416
+msgid "How many times a failed publish job is re-submitted (0–10)."
+msgstr ""
+
+#: includes/class-mis-settings.php:422
+msgid "Debounce interval (seconds)"
+msgstr ""
+
+#: includes/class-mis-settings.php:428
+msgid "Publish triggers are coalesced and run this many seconds after the last change (minimum 5)."
+msgstr ""
+
+#: includes/class-mis-settings.php:433
+msgid "Post types"
+msgstr ""
+
+#: includes/class-mis-settings.php:445
+msgid "Publishing content of these types triggers a static publish."
+msgstr ""
+
+#: assets/js/mis-editor.js:81
+msgid "Publish this post to the static site."
+msgstr ""
+
+#: assets/js/mis-editor.js:91
+msgid "Queuing…"
+msgstr ""
