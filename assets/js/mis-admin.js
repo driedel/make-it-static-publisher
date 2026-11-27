@@ -103,6 +103,23 @@
 			} );
 	}
 
+	function handleDetailsToggle( button ) {
+		var rowId = button.getAttribute( 'data-row-id' );
+		var row = rowId ? document.querySelector( 'tr[data-detail-for="' + rowId + '"]' ) : null;
+		if ( ! row ) {
+			return;
+		}
+
+		var expanded = row.hidden;
+		row.hidden = ! expanded;
+		button.setAttribute( 'aria-expanded', expanded ? 'true' : 'false' );
+
+		var strings = window.misAdmin.strings || {};
+		button.textContent = expanded
+			? strings.hideDetails || 'Hide details'
+			: strings.viewDetails || 'View details';
+	}
+
 	function handleRepublish( button ) {
 		var msg = document.getElementById( 'mis-republish-msg' );
 
@@ -135,6 +152,13 @@
 		if ( actionButton ) {
 			event.preventDefault();
 			handleJobAction( actionButton );
+			return;
+		}
+
+		var toggleButton = event.target.closest( '.mis-details-toggle' );
+		if ( toggleButton ) {
+			event.preventDefault();
+			handleDetailsToggle( toggleButton );
 			return;
 		}
 

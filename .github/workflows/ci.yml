@@ -92,10 +92,10 @@ jobs:
 
       - name: Copy plugin into wp-content/plugins
         run: |
-          mkdir -p /tmp/wordpress/wp-content/plugins/make-it-static
+          mkdir -p /tmp/wordpress/wp-content/plugins/make-it-static-publisher
           rsync -a --exclude='.git' --exclude='.wordpress-org' --exclude='.github' \
             --exclude='.distignore' --exclude='README.md' --exclude='CHANGELOG.md' \
-            "$GITHUB_WORKSPACE"/ /tmp/wordpress/wp-content/plugins/make-it-static/
+            "$GITHUB_WORKSPACE"/ /tmp/wordpress/wp-content/plugins/make-it-static-publisher/
 
       - name: Install and activate plugin-check
         run: |
@@ -105,5 +105,5 @@ jobs:
       - name: Run Plugin Check
         run: |
           cd /tmp/wordpress
-          wp plugin activate make-it-static --allow-root
-          wp plugin check make-it-static --exclude-directories=.wordpress-org --format=json --allow-root
+          wp plugin activate make-it-static-publisher --allow-root
+          wp plugin check make-it-static-publisher --exclude-directories=.wordpress-org --format=json --allow-root

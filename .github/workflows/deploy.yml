@@ -1,7 +1,7 @@
 # Deploy to WordPress.org on release.
 #
 # Release discipline (SemVer): the git tag, the `Version:` header in
-# make-it-static.php, and the `Stable tag:` in readme.txt must all match
+# the plugin's main PHP file, and the `Stable tag:` in readme.txt must all match
 # (e.g. 1.0.0). The deploy action extracts the version from the header and
 # tags that SVN version, so a mismatch breaks the release.
 name: Deploy to WordPress.org
@@ -28,13 +28,13 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: make-it-static
+          SLUG: make-it-static-publisher
           VERSION: ${{ github.event.release.tag_name }}
 
       - name: Attach ZIP to release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.workspace }}/make-it-static.zip
+          files: ${{ github.workspace }}/make-it-static-publisher.zip
 
   assets:
     name: Sync readme.txt and assets
@@ -48,5 +48,5 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: make-it-static
+          SLUG: make-it-static-publisher
           VERSION: ${{ github.event.release.tag_name }}

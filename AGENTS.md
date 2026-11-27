@@ -16,6 +16,8 @@ The plugin is a **pure HTTP client**. It does not scrape, optimize, or upload an
 
 **Requirements:** PHP 8.1+, WordPress 6.0+. The service's worker must be able to reach WordPress over HTTP; it identifies as user agent `MakeItStaticBot/1.0`.
 
+**History:** the plugin ships to WordPress.org under the slug `make-it-static-publisher` (GitHub repo `driedel/make-it-static-publisher`) because the original slug `make-it-static` is unavailable — it belongs to a third-party plugin closed since 2018. The text domain matches the slug.
+
 ## Repository layout
 
 ```
@@ -52,7 +54,7 @@ assets/css/mis-admin.css    Styles for the jobs screen.
 assets/js/                  Vanilla JS (no build step, no framework): mis-admin.js (jobs page,
                             fetch-based AJAX), mis-settings.js (test connection), mis-editor.js
                             (block editor sidebar via wp.plugins/wp.element, no JSX — createElement).
-languages/make-it-static.pot  Translation template; text domain `make-it-static` everywhere.
+languages/make-it-static-publisher.pot  Translation template; text domain `make-it-static-publisher` everywhere.
 .github/workflows/ci.yml    CI: PHPCS (WordPress-Core) + WordPress Plugin Check.
 .github/workflows/deploy.yml  Release deploy to WordPress.org SVN.
 .wordpress-org/             WordPress.org banners/icons/screenshots (not shipped in the plugin ZIP).
@@ -79,7 +81,7 @@ README.md                   Developer/user documentation (architecture, Docker s
 
 - Every PHP file starts with `defined( 'ABSPATH' ) || exit;` (uninstall.php guards on `WP_UNINSTALL_PLUGIN`).
 - Classes are named `MIS_*` in `includes/class-mis-*.php`; constants/options/hooks/transients are prefixed `mis_`/`MIS_`. Each component exposes a static `register()` that wires its hooks; `MIS_Plugin::init()` calls them on `plugins_loaded`.
-- All user-facing strings are internationalized with the `make-it-static` text domain; escape on output (`esc_html__`, `esc_attr`, etc.). Regenerate `languages/make-it-static.pot` (e.g. `wp i18n make-pot`) when adding strings.
+- All user-facing strings are internationalized with the `make-it-static-publisher` text domain; escape on output (`esc_html__`, `esc_attr`, etc.). Regenerate `languages/make-it-static-publisher.pot` (e.g. `wp i18n make-pot`) when adding strings.
 - SQL goes through `$wpdb->prepare()`; interpolated table names carry a `phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared` annotation (existing convention).
 - AJAX handlers verify the shared `mis_admin_nonce` (`check_ajax_referer`) and a capability (`manage_options` or `edit_post`) before acting.
 - Docblocks on every class and method (WordPress style, `@package` tag; note: job-store/poller files use `@package Make_It_Static`, the rest `MakeItStatic`).
@@ -99,7 +101,7 @@ README.md                   Developer/user documentation (architecture, Docker s
 There is **no automated test suite** in this repository (no PHPUnit, no JS tests). Quality gates are CI-only:
 
 1. **PHPCS** with the WordPress-Core standard (see command above) — runs on pushes to `main` and all PRs.
-2. **WordPress Plugin Check** (`wp plugin check make-it-static`) — CI spins up MySQL 8 + a WP-CLI-installed WordPress, activates the plugin, and runs the official plugin-check plugin.
+2. **WordPress Plugin Check** (`wp plugin check make-it-static-publisher`) — CI spins up MySQL 8 + a WP-CLI-installed WordPress, activates the plugin, and runs the official plugin-check plugin.
 
 Manual verification requires a running Make it Static service (or a stub of its four endpoints). The settings screen's **Test connection** button pings `GET /health` and reports Redis availability.
 
@@ -112,7 +114,7 @@ Releases follow **Semantic Versioning** and publish to WordPress.org via GitHub 
 3. Add the release entry to `readme.txt` (`== Changelog ==` and `== Upgrade Notice ==`) and to `CHANGELOG.md` (Keep a Changelog format).
 4. Commit, `git tag vX.Y.Z`, push the tag.
 5. Publish a GitHub Release from the tag. `deploy.yml` then:
-   - pushes to WordPress.org SVN via `10up/action-wordpress-plugin-deploy` (slug `make-it-static`, ZIP generated and attached to the release),
+   - pushes to WordPress.org SVN via `10up/action-wordpress-plugin-deploy` (slug `make-it-static-publisher`, ZIP generated and attached to the release),
    - syncs `readme.txt` and `.wordpress-org/` assets via `10up/action-wordpress-plugin-asset-update`.
    Required repo secrets: `SVN_USERNAME`, `SVN_PASSWORD`.
 

@@ -49,7 +49,7 @@ class MIS_Post_UI {
 		$actions['mis_publish_static'] = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( $url ),
-			esc_html__( 'Publish static', 'make-it-static' )
+			esc_html__( 'Publish static', 'make-it-static-publisher' )
 		);
 
 		return $actions;
@@ -71,7 +71,7 @@ class MIS_Post_UI {
 		check_admin_referer( 'mis_publish_static_' . $post_id );
 
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			wp_die( esc_html__( 'You are not allowed to publish this post.', 'make-it-static' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to publish this post.', 'make-it-static-publisher' ), 403 );
 		}
 
 		$result = MIS_Publisher::publish_now( $post_id );
@@ -124,7 +124,7 @@ class MIS_Post_UI {
 				esc_html(
 					sprintf(
 						/* translators: %d: job row ID. */
-						__( 'Static publish queued (job #%d).', 'make-it-static' ),
+						__( 'Static publish queued (job #%d).', 'make-it-static-publisher' ),
 						$job
 					)
 				)
@@ -137,7 +137,7 @@ class MIS_Post_UI {
 				: '';
 			$message = '' !== $raw_message
 				? sanitize_text_field( $raw_message )
-				: __( 'The static publish request failed.', 'make-it-static' );
+				: __( 'The static publish request failed.', 'make-it-static-publisher' );
 			printf(
 				'<div class="notice notice-error is-dismissible"><p>%s</p></div>',
 				esc_html( $message )
@@ -152,7 +152,7 @@ class MIS_Post_UI {
 		foreach ( self::enabled_post_types() as $post_type ) {
 			add_meta_box(
 				'mis_publish',
-				__( 'Make it Static', 'make-it-static' ),
+				__( 'Make it Static', 'make-it-static-publisher' ),
 				array( __CLASS__, 'render_meta_box' ),
 				$post_type,
 				'side'
@@ -166,13 +166,13 @@ class MIS_Post_UI {
 	 * @param WP_Post $post Post object.
 	 */
 	public static function render_meta_box( $post ): void {
-		$status_text = __( 'No publish job recorded for this post yet.', 'make-it-static' );
+		$status_text = __( 'No publish job recorded for this post yet.', 'make-it-static-publisher' );
 
 		foreach ( MIS_Job_Store::get_recent( 20 ) as $row ) {
 			if ( (int) $row['post_id'] === (int) $post->ID ) {
 				$status_text = sprintf(
 					/* translators: 1: job status, 2: last update datetime. */
-					__( 'Last job: %1$s (%2$s)', 'make-it-static' ),
+					__( 'Last job: %1$s (%2$s)', 'make-it-static-publisher' ),
 					(string) $row['status'],
 					(string) $row['updated_at']
 				);
@@ -184,7 +184,7 @@ class MIS_Post_UI {
 			<button type="button" class="button button-primary" id="mis-publish-static"
 				data-post-id="<?php echo esc_attr( (string) $post->ID ); ?>"
 				<?php disabled( ! current_user_can( 'edit_post', $post->ID ) ); ?>>
-				<?php esc_html_e( 'Publish static', 'make-it-static' ); ?>
+				<?php esc_html_e( 'Publish static', 'make-it-static-publisher' ); ?>
 			</button>
 		</p>
 		<p class="description" id="mis-publish-status"><?php echo esc_html( $status_text ); ?></p>
@@ -214,8 +214,8 @@ class MIS_Post_UI {
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'mis_admin_nonce' ),
 				'strings' => array(
-					'publishing' => __( 'Queuing publish…', 'make-it-static' ),
-					'error'      => __( 'The static publish request failed.', 'make-it-static' ),
+					'publishing' => __( 'Queuing publish…', 'make-it-static-publisher' ),
+					'error'      => __( 'The static publish request failed.', 'make-it-static-publisher' ),
 				),
 			)
 		);
@@ -271,10 +271,10 @@ class MIS_Post_UI {
 
 		if ( $post_id > 0 ) {
 			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				wp_send_json_error( array( 'message' => __( 'You are not allowed to publish this post.', 'make-it-static' ) ), 403 );
+				wp_send_json_error( array( 'message' => __( 'You are not allowed to publish this post.', 'make-it-static-publisher' ) ), 403 );
 			}
 		} elseif ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You are not allowed to publish the whole site.', 'make-it-static' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not allowed to publish the whole site.', 'make-it-static-publisher' ) ), 403 );
 		}
 
 		$result = MIS_Publisher::publish_now( $post_id );
@@ -291,7 +291,7 @@ class MIS_Post_UI {
 				),
 				'message' => sprintf(
 					/* translators: %d: job row ID. */
-					__( 'Static publish queued (job #%d).', 'make-it-static' ),
+					__( 'Static publish queued (job #%d).', 'make-it-static-publisher' ),
 					(int) $result
 				),
 			)

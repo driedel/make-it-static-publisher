@@ -135,7 +135,7 @@ class MIS_Publisher {
 		if ( $post_id > 0 ) {
 			$permalink = get_permalink( $post_id );
 			if ( ! $permalink ) {
-				return new WP_Error( 'mis_invalid_post', __( 'Cannot determine the permalink for this post.', 'make-it-static' ) );
+				return new WP_Error( 'mis_invalid_post', __( 'Cannot determine the permalink for this post.', 'make-it-static-publisher' ) );
 			}
 			$path = wp_parse_url( $permalink, PHP_URL_PATH );
 			$path = is_string( $path ) && '' !== $path ? $path : '/';
@@ -164,7 +164,7 @@ class MIS_Publisher {
 
 		$job_id = isset( $result['job_id'] ) ? (string) $result['job_id'] : '';
 		if ( '' === $job_id ) {
-			return new WP_Error( 'mis_missing_job_id', __( 'The service did not return a job ID.', 'make-it-static' ) );
+			return new WP_Error( 'mis_missing_job_id', __( 'The service did not return a job ID.', 'make-it-static-publisher' ) );
 		}
 
 		$row_id = MIS_Job_Store::insert(
@@ -178,7 +178,7 @@ class MIS_Publisher {
 		);
 
 		if ( false === $row_id ) {
-			return new WP_Error( 'mis_store_error', __( 'Could not store the publish job.', 'make-it-static' ) );
+			return new WP_Error( 'mis_store_error', __( 'Could not store the publish job.', 'make-it-static-publisher' ) );
 		}
 
 		return $row_id;
@@ -197,7 +197,7 @@ class MIS_Publisher {
 			$payload = json_decode( $payload, true );
 		}
 		if ( ! is_array( $payload ) || empty( $payload['url'] ) || empty( $payload['post_id'] ) ) {
-			return new WP_Error( 'mis_invalid_payload', __( 'The stored job payload is missing or invalid.', 'make-it-static' ) );
+			return new WP_Error( 'mis_invalid_payload', __( 'The stored job payload is missing or invalid.', 'make-it-static-publisher' ) );
 		}
 
 		$client = new MIS_API_Client();
@@ -208,7 +208,7 @@ class MIS_Publisher {
 
 		$job_id = isset( $result['job_id'] ) ? (string) $result['job_id'] : '';
 		if ( '' === $job_id ) {
-			return new WP_Error( 'mis_missing_job_id', __( 'The service did not return a job ID.', 'make-it-static' ) );
+			return new WP_Error( 'mis_missing_job_id', __( 'The service did not return a job ID.', 'make-it-static-publisher' ) );
 		}
 
 		$updated = MIS_Job_Store::update(
@@ -223,7 +223,7 @@ class MIS_Publisher {
 		);
 
 		if ( ! $updated ) {
-			return new WP_Error( 'mis_store_error', __( 'Could not update the publish job.', 'make-it-static' ) );
+			return new WP_Error( 'mis_store_error', __( 'Could not update the publish job.', 'make-it-static-publisher' ) );
 		}
 
 		return (int) $row['id'];

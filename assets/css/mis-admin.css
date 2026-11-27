@@ -14,24 +14,32 @@
 }
 
 .mis-jobs-table .mis-col-job {
-	width: 26%;
+	width: 22%;
 }
 
 .mis-jobs-table .mis-col-status {
-	width: 10%;
-}
-
-.mis-jobs-table .mis-col-attempts {
-	width: 8%;
+	width: 12%;
 }
 
 .mis-jobs-table .mis-col-date {
-	width: 10%;
+	width: 14%;
+}
+
+.mis-jobs-table .mis-col-result {
+	width: 26%;
 }
 
 .mis-jobs-table .mis-col-actions {
 	width: 12%;
 	white-space: nowrap;
+}
+
+.mis-job-title {
+	font-weight: 600;
+}
+
+.mis-date-abs {
+	font-size: 12px;
 }
 
 .mis-job-id {
@@ -94,24 +102,112 @@
 }
 
 /* Details cell */
-.mis-result {
-	margin: 0;
+.mis-result-summary {
+	margin: 0 0 2px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.mis-details-toggle {
+	appearance: none;
+	background: none;
+	border: 0;
+	padding: 0;
+	margin: 2px 0 0;
+	cursor: pointer;
+	color: #2271b1;
+	font-size: 12px;
+	line-height: 1.4;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.mis-details-toggle:hover,
+.mis-details-toggle:focus {
+	color: #135e96;
+}
+
+/* Expandable detail row */
+.mis-detail-row > .mis-detail-cell {
+	background: #f6f7f7;
+	padding: 14px 16px;
 	font-size: 12px;
 }
 
-.mis-result-row {
-	display: flex;
-	gap: 6px;
+.mis-detail-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px 20px;
 }
 
-.mis-result-row dt {
+.mis-detail-section {
+	min-width: 0;
+}
+
+.mis-detail-heading {
+	font-size: 13px;
 	font-weight: 600;
+	margin: 0 0 6px;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+/* Build meta list */
+.mis-detail-meta {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 8px 16px;
 	margin: 0;
 }
 
-.mis-result-row dd {
+.mis-detail-meta-item dt {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #646970;
+	margin: 0 0 1px;
+}
+
+.mis-detail-meta-item dd {
 	margin: 0;
 	word-break: break-all;
+}
+
+/* Pages table */
+.mis-report-pages-table {
+	border-collapse: collapse;
+	margin: 0 0 6px;
+}
+
+.mis-report-pages-table th,
+.mis-report-pages-table td {
+	padding: 2px 12px 2px 0;
+	text-align: left;
+	font-size: 12px;
+}
+
+.mis-report-pages-table th {
+	font-weight: 600;
+	color: #646970;
+}
+
+.mis-report-pages-table code {
+	font-size: 11px;
+	word-break: break-all;
+}
+
+.mis-report-pages-table td:last-child,
+.mis-report-pages-table th:last-child {
+	white-space: nowrap;
+	padding-right: 0;
+}
+
+.mis-report-more {
+	margin: 0 0 6px;
+	font-size: 12px;
+	color: #646970;
+	font-style: italic;
 }
 
 .mis-error {
@@ -138,9 +234,6 @@
 
 /* Build report */
 .mis-report {
-	margin-top: 8px;
-	padding-top: 8px;
-	border-top: 1px solid #e0e0e0;
 	font-size: 12px;
 }
 
@@ -188,11 +281,6 @@
 .mis-report-steps {
 	margin: 0 0 6px;
 	color: #646970;
-}
-
-.mis-report-top-label {
-	margin: 0;
-	font-weight: 600;
 }
 
 .mis-report-top {

@@ -125,8 +125,8 @@ class MIS_Settings {
 	 */
 	public static function add_menu(): void {
 		add_options_page(
-			__( 'Make it Static', 'make-it-static' ),
-			__( 'Make it Static', 'make-it-static' ),
+			__( 'Make it Static', 'make-it-static-publisher' ),
+			__( 'Make it Static', 'make-it-static-publisher' ),
 			'manage_options',
 			'make-it-static',
 			array( __CLASS__, 'render_page' )
@@ -231,8 +231,8 @@ class MIS_Settings {
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'mis_admin_nonce' ),
 				'strings' => array(
-					'testing' => __( 'Testing connection…', 'make-it-static' ),
-					'error'   => __( 'The connection test failed unexpectedly.', 'make-it-static' ),
+					'testing' => __( 'Testing connection…', 'make-it-static-publisher' ),
+					'error'   => __( 'The connection test failed unexpectedly.', 'make-it-static-publisher' ),
 				),
 			)
 		);
@@ -258,7 +258,7 @@ class MIS_Settings {
 				array(
 					'ok'    => false,
 					'redis' => false,
-					'human' => __( 'You are not allowed to do this.', 'make-it-static' ),
+					'human' => __( 'You are not allowed to do this.', 'make-it-static-publisher' ),
 				),
 				403
 			);
@@ -273,7 +273,7 @@ class MIS_Settings {
 					'redis' => false,
 					'human' => sprintf(
 						/* translators: %s: error message returned by the HTTP layer. */
-						__( 'Connection failed: %s', 'make-it-static' ),
+						__( 'Connection failed: %s', 'make-it-static-publisher' ),
 						$response->get_error_message()
 					),
 				)
@@ -282,8 +282,8 @@ class MIS_Settings {
 
 		$redis = ! empty( $response['redis'] );
 		$human = $redis
-			? __( 'Connection successful. The API is reachable and the job queue is ready.', 'make-it-static' )
-			: __( 'The API is reachable, but it reports that Redis is unavailable — publish jobs will not run until Redis is back.', 'make-it-static' );
+			? __( 'Connection successful. The API is reachable and the job queue is ready.', 'make-it-static-publisher' )
+			: __( 'The API is reachable, but it reports that Redis is unavailable — publish jobs will not run until Redis is back.', 'make-it-static-publisher' );
 
 		wp_send_json_success(
 			array(
@@ -308,11 +308,11 @@ class MIS_Settings {
 		$from_constant  = self::secret_from_constant();
 		$public_types   = get_post_types( array( 'public' => true ), 'objects' );
 		$checkbox_flags = array(
-			'bundle_css'      => __( 'Bundle CSS', 'make-it-static' ),
-			'bundle_js'       => __( 'Bundle JavaScript', 'make-it-static' ),
-			'compress_images' => __( 'Compress images', 'make-it-static' ),
-			'compress_html'   => __( 'Compress HTML', 'make-it-static' ),
-			'convert_fonts'   => __( 'Convert fonts', 'make-it-static' ),
+			'bundle_css'      => __( 'Bundle CSS', 'make-it-static-publisher' ),
+			'bundle_js'       => __( 'Bundle JavaScript', 'make-it-static-publisher' ),
+			'compress_images' => __( 'Compress images', 'make-it-static-publisher' ),
+			'compress_html'   => __( 'Compress HTML', 'make-it-static-publisher' ),
+			'convert_fonts'   => __( 'Convert fonts', 'make-it-static-publisher' ),
 		);
 		?>
 		<div class="wrap">
@@ -323,17 +323,17 @@ class MIS_Settings {
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row">
-							<label for="mis-api-base-url"><?php esc_html_e( 'API base URL', 'make-it-static' ); ?></label>
+							<label for="mis-api-base-url"><?php esc_html_e( 'API base URL', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<input type="url" class="regular-text" id="mis-api-base-url" name="mis_settings[api_base_url]"
 								value="<?php echo esc_attr( $settings['api_base_url'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'Base URL of the Make it Static API service.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Base URL of the Make it Static API service.', 'make-it-static-publisher' ); ?>
 							</p>
 							<p>
 								<button type="button" class="button" id="mis-test-connection">
-									<?php esc_html_e( 'Test connection', 'make-it-static' ); ?>
+									<?php esc_html_e( 'Test connection', 'make-it-static-publisher' ); ?>
 								</button>
 							</p>
 							<div id="mis-test-result" class="mis-test-result" hidden></div>
@@ -341,61 +341,61 @@ class MIS_Settings {
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-hmac-secret"><?php esc_html_e( 'HMAC secret', 'make-it-static' ); ?></label>
+							<label for="mis-hmac-secret"><?php esc_html_e( 'HMAC secret', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<?php if ( $from_constant ) : ?>
 								<input type="text" class="regular-text" id="mis-hmac-secret" disabled="disabled"
-									placeholder="<?php esc_attr_e( 'Defined in wp-config.php', 'make-it-static' ); ?>" />
+									placeholder="<?php esc_attr_e( 'Defined in wp-config.php', 'make-it-static-publisher' ); ?>" />
 								<p class="description">
-									<?php esc_html_e( 'The secret is defined via the MAKE_IT_STATIC_HMAC_SECRET constant in wp-config.php and cannot be changed here.', 'make-it-static' ); ?>
+									<?php esc_html_e( 'The secret is defined via the MAKE_IT_STATIC_HMAC_SECRET constant in wp-config.php and cannot be changed here.', 'make-it-static-publisher' ); ?>
 								</p>
 							<?php else : ?>
 								<input type="password" class="regular-text" id="mis-hmac-secret" name="mis_settings[hmac_secret]"
 									value="" autocomplete="new-password" />
 								<p class="description">
-									<?php esc_html_e( 'Shared secret used to sign publish requests. Leave empty to keep the current secret.', 'make-it-static' ); ?>
+									<?php esc_html_e( 'Shared secret used to sign publish requests. Leave empty to keep the current secret.', 'make-it-static-publisher' ); ?>
 								</p>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-scrape-url-base"><?php esc_html_e( 'Scrape URL base', 'make-it-static' ); ?></label>
+							<label for="mis-scrape-url-base"><?php esc_html_e( 'Scrape URL base', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<input type="url" class="regular-text" id="mis-scrape-url-base" name="mis_settings[scrape_url_base]"
 								value="<?php echo esc_attr( $settings['scrape_url_base'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'Optional. Overrides the URL the service uses to scrape this site — set it only when the service must reach the site through an internal address (e.g. a Docker network alias). The URL host becomes the site identity on the service (the S3 prefix / CloudFront origin path): publishing with a different host deploys to a different prefix. Defaults to the WordPress home URL.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Optional. Overrides the URL the service uses to scrape this site — set it only when the service must reach the site through an internal address (e.g. a Docker network alias). The URL host becomes the site identity on the service (the S3 prefix / CloudFront origin path): publishing with a different host deploys to a different prefix. Defaults to the WordPress home URL.', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-cloudfront-id"><?php esc_html_e( 'CloudFront distribution ID', 'make-it-static' ); ?></label>
+							<label for="mis-cloudfront-id"><?php esc_html_e( 'CloudFront distribution ID', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<input type="text" class="regular-text" id="mis-cloudfront-id" name="mis_settings[cloudfront_distribution_id]"
 								value="<?php echo esc_attr( $settings['cloudfront_distribution_id'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'Optional. When set, the API creates a cache invalidation after each publish.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Optional. When set, the API creates a cache invalidation after each publish.', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-extra-cdn"><?php esc_html_e( 'Extra CDN domains', 'make-it-static' ); ?></label>
+							<label for="mis-extra-cdn"><?php esc_html_e( 'Extra CDN domains', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<textarea class="large-text code" rows="4" id="mis-extra-cdn" name="mis_settings[extra_cdn]"><?php echo esc_textarea( $settings['extra_cdn'] ); ?></textarea>
 							<p class="description">
-								<?php esc_html_e( 'Optional. One domain per line; asset URLs on these domains are treated as local.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Optional. One domain per line; asset URLs on these domains are treated as local.', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Optimizations', 'make-it-static' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Optimizations', 'make-it-static-publisher' ); ?></th>
 						<td>
 							<fieldset>
 								<?php foreach ( $checkbox_flags as $flag => $label ) : ?>
@@ -407,52 +407,52 @@ class MIS_Settings {
 									</label><br />
 								<?php endforeach; ?>
 								<p class="description">
-									<?php esc_html_e( 'Checked optimizations are sent to the API as enabled.', 'make-it-static' ); ?>
+									<?php esc_html_e( 'Checked optimizations are sent to the API as enabled.', 'make-it-static-publisher' ); ?>
 								</p>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-retry-count"><?php esc_html_e( 'Retry count', 'make-it-static' ); ?></label>
+							<label for="mis-retry-count"><?php esc_html_e( 'Retry count', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<input type="number" min="0" max="10" step="1" id="mis-retry-count" name="mis_settings[retry_count]"
 								value="<?php echo esc_attr( (string) $settings['retry_count'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'How many times a failed publish job is re-submitted (0–10).', 'make-it-static' ); ?>
+								<?php esc_html_e( 'How many times a failed publish job is re-submitted (0–10).', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-debounce-interval"><?php esc_html_e( 'Debounce interval (seconds)', 'make-it-static' ); ?></label>
+							<label for="mis-debounce-interval"><?php esc_html_e( 'Debounce interval (seconds)', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<input type="number" min="5" step="1" id="mis-debounce-interval" name="mis_settings[debounce_interval]"
 								value="<?php echo esc_attr( (string) $settings['debounce_interval'] ); ?>" />
 							<p class="description">
-								<?php esc_html_e( 'Publish triggers are coalesced and run this many seconds after the last change (minimum 5).', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Publish triggers are coalesced and run this many seconds after the last change (minimum 5).', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="mis-auto-publish"><?php esc_html_e( 'Automatic publish', 'make-it-static' ); ?></label>
+							<label for="mis-auto-publish"><?php esc_html_e( 'Automatic publish', 'make-it-static-publisher' ); ?></label>
 						</th>
 						<td>
 							<select id="mis-auto-publish" name="mis_settings[auto_publish]">
-								<option value="always" <?php selected( $settings['auto_publish'], 'always' ); ?>><?php esc_html_e( 'Every save', 'make-it-static' ); ?></option>
-								<option value="first_publish" <?php selected( $settings['auto_publish'], 'first_publish' ); ?>><?php esc_html_e( 'Only first publish', 'make-it-static' ); ?></option>
-								<option value="manual" <?php selected( $settings['auto_publish'], 'manual' ); ?>><?php esc_html_e( 'Manual only', 'make-it-static' ); ?></option>
+								<option value="always" <?php selected( $settings['auto_publish'], 'always' ); ?>><?php esc_html_e( 'Every save', 'make-it-static-publisher' ); ?></option>
+								<option value="first_publish" <?php selected( $settings['auto_publish'], 'first_publish' ); ?>><?php esc_html_e( 'Only first publish', 'make-it-static-publisher' ); ?></option>
+								<option value="manual" <?php selected( $settings['auto_publish'], 'manual' ); ?>><?php esc_html_e( 'Manual only', 'make-it-static-publisher' ); ?></option>
 							</select>
 							<p class="description">
-								<?php esc_html_e( 'Every save: any save of a published post queues a publish. Only first publish: updating an already-published post does not trigger. Manual only: nothing automatic — use the publish buttons. Trashing or deleting content publishes the whole site unless Manual only is selected.', 'make-it-static' ); ?>
+								<?php esc_html_e( 'Every save: any save of a published post queues a publish. Only first publish: updating an already-published post does not trigger. Manual only: nothing automatic — use the publish buttons. Trashing or deleting content publishes the whole site unless Manual only is selected.', 'make-it-static-publisher' ); ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Post types', 'make-it-static' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Post types', 'make-it-static-publisher' ); ?></th>
 						<td>
 							<fieldset>
 								<?php foreach ( $public_types as $post_type ) : ?>
@@ -464,7 +464,7 @@ class MIS_Settings {
 									</label><br />
 								<?php endforeach; ?>
 								<p class="description">
-									<?php esc_html_e( 'Publishing content of these types triggers a static publish.', 'make-it-static' ); ?>
+									<?php esc_html_e( 'Publishing content of these types triggers a static publish.', 'make-it-static-publisher' ); ?>
 								</p>
 							</fieldset>
 						</td>

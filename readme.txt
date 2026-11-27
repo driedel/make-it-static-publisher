@@ -78,14 +78,26 @@ No. The only outbound HTTP requests go to the Make it Static service URL you con
 == Screenshots ==
 
 1. The settings screen: API connection, signing secret, CloudFront and CDN options, optimization toggles, and behavior settings. (screenshot-1.png)
-2. The job status screen: recent publish jobs with live status, results, and retry/cancel actions. (screenshot-2.png)
+2. The jobs screen: recent publish jobs with live status, one-line results, and retry/cancel actions. (screenshot-2.png)
+3. Expanded job details: a full-width row with the build summary, the list of scraped pages, per-type asset savings, step timings, and top savings. (screenshot-3.png)
 
 == Changelog ==
 
 = 1.0.0 =
-* Initial release.
+Released on 2026-11-27. First public release.
+
+* Publishes WordPress content to a self-hosted Make it Static static-site service via its HTTP API.
+* HMAC-SHA256 signed publish requests (`X-Signature` / `X-Timestamp` headers) with a ±300-second timestamp window.
+* Configurable API base URL, HMAC secret (settings field or `MAKE_IT_STATIC_HMAC_SECRET` PHP constant), scrape URL base override, CloudFront distribution ID, extra CDN domains, and optimization options (bundle CSS, bundle JS, compress images, compress HTML, convert fonts).
+* Automatic publishing on post publish/update and whole-site re-publish on trash/delete, with configurable debounce and coalescing (at most one active job plus one queued follow-up).
+* New **Automatic publish** setting with three modes: *Every save*, *Only first publish*, and *Manual only*.
+* Asynchronous job tracking in a custom `mis_jobs` database table, polled via WP-Cron every 30 seconds.
+* Automatic retries of failed jobs by re-publishing (configurable retry count).
+* Job status admin screen with publish-now, retry, and cancel actions; jobs show the post title or "Whole site", a one-line result summary, and an expandable full-width row with the full result and build report (pages scraped, per-type asset savings with percentages, step timings, video conversion/cache stats, top savings).
+* The site's `home_url()` host (with port, when non-standard) is automatically added to the extra CDN domains when it differs from the scrape base host.
+* Settings screen with a connection test against the service health endpoint.
 
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release.
+First public release.

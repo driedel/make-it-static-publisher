@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Make it Static
- * Plugin URI:        https://github.com/driedel/make-it-static-wp-plugin
+ * Plugin URI:        https://github.com/driedel/make-it-static-publisher
  * Description:       Publishes your WordPress site as a static site via an external Make it Static API service (scrapes, optimizes assets, uploads to S3, optionally invalidates CloudFront).
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -9,7 +9,7 @@
  * Author:            Danilo Riedel
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       make-it-static
+ * Text Domain:       make-it-static-publisher
  * Domain Path:       /languages
  *
  * @package MakeItStatic

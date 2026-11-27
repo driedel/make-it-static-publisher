@@ -77,7 +77,7 @@ final class MIS_API_Client {
 
 		$raw_body = wp_json_encode( $body );
 		if ( false === $raw_body ) {
-			return new WP_Error( 'mis_api_error', __( 'Could not encode the publish request.', 'make-it-static' ) );
+			return new WP_Error( 'mis_api_error', __( 'Could not encode the publish request.', 'make-it-static-publisher' ) );
 		}
 
 		$headers = array_merge(
@@ -180,7 +180,7 @@ final class MIS_API_Client {
 			? $body['detail']
 			: sprintf(
 				/* translators: %d: HTTP status code. */
-				__( 'Unexpected response from the API (HTTP %d).', 'make-it-static' ),
+				__( 'Unexpected response from the API (HTTP %d).', 'make-it-static-publisher' ),
 				$status
 			);
 

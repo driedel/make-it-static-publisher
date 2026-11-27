@@ -36,7 +36,7 @@ class MIS_Poller {
 		if ( ! isset( $schedules[ self::CRON_SCHEDULE ] ) ) {
 			$schedules[ self::CRON_SCHEDULE ] = array(
 				'interval' => 30,
-				'display'  => __( 'Every 30 seconds (Make it Static)', 'make-it-static' ),
+				'display'  => __( 'Every 30 seconds (Make it Static)', 'make-it-static-publisher' ),
 			);
 		}
 
@@ -101,7 +101,7 @@ class MIS_Poller {
 				(int) $row['id'],
 				array(
 					'status' => 'failed',
-					'error'  => __( 'Job row has no remote job ID.', 'make-it-static' ),
+					'error'  => __( 'Job row has no remote job ID.', 'make-it-static-publisher' ),
 				)
 			);
 			return;
@@ -162,7 +162,7 @@ class MIS_Poller {
 					(int) $row['id'],
 					array(
 						'status' => 'failed',
-						'error'  => __( 'Job failed — check server logs. On the Make it Static host, run `docker compose logs worker` for details.', 'make-it-static' ),
+						'error'  => __( 'Job failed — check server logs. On the Make it Static host, run `docker compose logs worker` for details.', 'make-it-static-publisher' ),
 					)
 				);
 				break;
