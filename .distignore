@@ -9,6 +9,7 @@ node_modules
 .distignore
 .gitignore
 .gitattributes
+AGENTS.md
 README.md
 CHANGELOG.md
 composer.json

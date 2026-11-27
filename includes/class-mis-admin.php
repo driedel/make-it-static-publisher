@@ -167,7 +167,7 @@ class MIS_Admin {
 						printf(
 							/* translators: %d: number of publish attempts. */
 							esc_html__( 'Attempt %d', 'make-it-static-publisher' ),
-							$attempts
+							$attempts // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Integer attempt count, printed with %d.
 						);
 						?>
 					</div>
@@ -398,9 +398,13 @@ class MIS_Admin {
 
 		$report = ( isset( $result['report'] ) && is_array( $result['report'] ) ) ? $result['report'] : array();
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Section HTML is assembled from escaped parts in render_detail_section().
 		echo self::render_detail_section( 'assets', __( 'Assets', 'make-it-static-publisher' ), array( __CLASS__, 'render_report_assets' ), $report );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Section HTML is assembled from escaped parts in render_detail_section().
 		echo self::render_detail_section( 'pages', __( 'Pages', 'make-it-static-publisher' ), array( __CLASS__, 'render_report_pages' ), $report );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Section HTML is assembled from escaped parts in render_detail_section().
 		echo self::render_detail_section( 'timing', __( 'Timing', 'make-it-static-publisher' ), array( __CLASS__, 'render_report_steps' ), $report );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Section HTML is assembled from escaped parts in render_detail_section().
 		echo self::render_detail_section( 'savings', __( 'Top savings', 'make-it-static-publisher' ), array( __CLASS__, 'render_report_top_savings' ), $report );
 
 		return (string) ob_get_clean();
@@ -563,7 +567,7 @@ class MIS_Admin {
 				printf(
 					/* translators: %d: number of additional pages not listed. */
 					esc_html( _n( '…and %d more', '…and %d more', $remaining, 'make-it-static-publisher' ) ),
-					$remaining
+					$remaining // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Integer overflow count, printed with %d.
 				);
 				?>
 			</p>

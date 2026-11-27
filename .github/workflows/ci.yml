@@ -36,6 +36,13 @@ jobs:
           phpcs --standard=WordPress-Core --extensions=php \
             --ignore=.wordpress-org,.git,node_modules,vendor \
             .
+          # WordPress-Extra carries the security sniffs the WordPress.org
+          # plugin scanner runs; warnings (e.g. the intentional 30 s cron)
+          # must not fail the build.
+          phpcs --standard=WordPress-Extra --extensions=php \
+            --ignore=.wordpress-org,.git,node_modules,vendor \
+            --runtime-set ignore_warnings_on_exit 1 \
+            .
 
   plugin-check:
     name: WordPress Plugin Check
