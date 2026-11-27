@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Make it Static
+ * Plugin Name:       Make it Static Publisher
  * Plugin URI:        https://github.com/driedel/make-it-static-publisher
  * Description:       Publishes your WordPress site as a static site via an external Make it Static API service (scrapes, optimizes assets, uploads to S3, optionally invalidates CloudFront).
  * Version:           1.0.0

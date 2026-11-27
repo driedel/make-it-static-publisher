@@ -1,4 +1,4 @@
-=== Make it Static ===
+=== Make it Static Publisher ===
 Contributors: driedel
 Tags: static, static site, cache, performance, deployment
 Requires at least: 6.0
