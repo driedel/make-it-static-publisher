@@ -21,7 +21,7 @@ function mis_uninstall_site(): void {
 	wp_clear_scheduled_hook( 'mis_run_publish' );
 
 	// Table name is built from the prefix only; dbDelta-created, safe to drop.
-	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}mis_jobs" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}mis_jobs" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- Uninstall cleanup; the table is derived from $wpdb->prefix only and dropping the plugin's own table is the expected behavior.
 }
 
 if ( is_multisite() ) {

@@ -101,6 +101,7 @@ class MIS_Job_Store {
 
 		$formats = array( '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom-table insert; WordPress has no higher-level API for custom tables.
 		$inserted = $wpdb->insert( self::table(), $row, $formats );
 
 		if ( false === $inserted ) {
@@ -152,6 +153,7 @@ class MIS_Job_Store {
 		$row['updated_at'] = current_time( 'mysql' );
 		$formats[]         = '%s';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom-table write-through; a cached copy would serve stale rows to the 30s poller.
 		$updated = $wpdb->update( self::table(), $row, array( 'id' => $id ), $formats, array( '%d' ) );
 
 		return false !== $updated;
@@ -164,6 +166,7 @@ class MIS_Job_Store {
 		global $wpdb;
 
 		$table = self::table();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
 		$row   = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
@@ -179,6 +182,7 @@ class MIS_Job_Store {
 		global $wpdb;
 
 		$table = self::table();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
 		$row   = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM {$table} WHERE job_id = %s ORDER BY id DESC LIMIT 1", $job_id ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
@@ -197,6 +201,7 @@ class MIS_Job_Store {
 		global $wpdb;
 
 		$table = self::table();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
 		$rows  = $wpdb->get_results(
 			$wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", max( 1, $limit ) ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
@@ -217,6 +222,7 @@ class MIS_Job_Store {
 		$inactive     = array_merge( self::TERMINAL, array( 'expired' ) );
 		$placeholders = implode( ', ', array_fill( 0, count( $inactive ), '%s' ) );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count and all values are prepared.
@@ -239,6 +245,7 @@ class MIS_Job_Store {
 		$inactive     = array_merge( self::TERMINAL, array( 'expired' ) );
 		$placeholders = implode( ', ', array_fill( 0, count( $inactive ), '%s' ) );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count and all values are prepared.
