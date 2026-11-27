@@ -167,7 +167,7 @@ class MIS_Job_Store {
 
 		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
-		$row   = $wpdb->get_row(
+		$row = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
 		);
@@ -183,7 +183,7 @@ class MIS_Job_Store {
 
 		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
-		$row   = $wpdb->get_row(
+		$row = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM {$table} WHERE job_id = %s ORDER BY id DESC LIMIT 1", $job_id ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
 		);
@@ -202,7 +202,7 @@ class MIS_Job_Store {
 
 		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table is $wpdb->prefix . 'mis_jobs', never user input; fresh rows are required every poll.
-		$rows  = $wpdb->get_results(
+		$rows = $wpdb->get_results(
 			$wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", max( 1, $limit ) ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
 		);
