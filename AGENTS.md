@@ -100,8 +100,10 @@ README.md                   Developer/user documentation (architecture, Docker s
 
 There is **no automated test suite** in this repository (no PHPUnit, no JS tests). Quality gates are CI-only:
 
-1. **PHPCS** with the WordPress-Core standard (see command above) — runs on pushes to `main` and all PRs.
+1. **PHPCS** with the WordPress-Core standard (see command above) — runs on pushes to `main`, all PRs, and `v*` tags.
 2. **WordPress Plugin Check** (`wp plugin check make-it-static-publisher`) — CI spins up MySQL 8 + a WP-CLI-installed WordPress, activates the plugin, and runs the official plugin-check plugin.
+3. **Release gate** — `deploy.yml` runs a `verify` job (version alignment + PHPCS Core/Extra) that must pass before the SVN deploy and asset sync; the version trio (tag, `Version:`/`MIS_VERSION`, `Stable tag:`) plus changelog entries is enforced there.
+4. **WordPress.org compliance skill** — the rules above are maintained as a project skill at `.kimi-code/skills/wp-org-compliance/SKILL.md` (text domain = slug, escaping/annotation conventions, package hygiene, submission/release process, local verification commands). Consult it whenever changing user-facing code or preparing a release.
 
 Manual verification requires a running Make it Static service (or a stub of its four endpoints). The settings screen's **Test connection** button pings `GET /health` and reports Redis availability.
 

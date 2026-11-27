@@ -14,8 +14,52 @@ permissions:
   contents: write
 
 jobs:
+  verify:
+    name: Release verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify version alignment
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          test -n "$VERSION"
+          grep -E "Version:[[:space:]]+$VERSION([^0-9.]|$)" make-it-static.php
+          grep -F "define( 'MIS_VERSION', '$VERSION' );" make-it-static.php
+          grep -E "Stable tag:[[:space:]]+$VERSION([^0-9.]|$)" readme.txt
+          grep -F "= $VERSION =" readme.txt
+          grep -F "[$VERSION]" CHANGELOG.md
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: Install WordPress Coding Standards
+        run: |
+          composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --no-interaction \
+            squizlabs/php_codesniffer \
+            dealerdirect/phpcodesniffer-composer-installer \
+            wp-coding-standards/wpcs
+
+      - name: Run PHPCS
+        run: |
+          export PATH="$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:$PATH"
+          phpcs --standard=WordPress-Core --extensions=php \
+            --ignore=.wordpress-org,.git,node_modules,vendor \
+            .
+          phpcs --standard=WordPress-Extra --extensions=php \
+            --ignore=.wordpress-org,.git,node_modules,vendor \
+            --runtime-set ignore_warnings_on_exit 1 \
+            .
+
   deploy:
     name: Push to SVN and attach ZIP
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,6 +82,7 @@ jobs:
 
   assets:
     name: Sync readme.txt and assets
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

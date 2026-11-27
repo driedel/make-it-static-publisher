@@ -2,6 +2,7 @@
 .git
 .github
 .wordpress-org
+.kimi-code
 tests
 node_modules
 
